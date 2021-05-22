@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  martian_mongo_flavour:
+    build: .
+    env_file:
+      - .env.testing
+    container_name: martian_mongo
+    links:
+      - martian_mongo_db
+      - martian_redis_db
+    depends_on:
+      - martian_mongo_db
+      - martian_redis_db
+    ports:
+    - "4400:4400"
+    - "3000:4400"
+    volumes:
+    - ".:/usr/src/app"
+  martian_redis_db:
+    image: redis:6.2.1-alpine
+    container_name: martian_redis_db
+    ports:
+    - "6379:6379"
+  martian_mongo_db:
+    image: mongo:latest
+    container_name: martian_mongo_db
+    ports:
+      - "27017:27017"
+    command: --quiet
